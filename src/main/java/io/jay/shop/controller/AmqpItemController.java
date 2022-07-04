@@ -1,6 +1,7 @@
 package io.jay.shop.controller;
 
 import io.jay.shop.Item;
+import io.jay.shop.constant.MessageConstants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +12,8 @@ import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
 import java.net.URI;
+
+import static io.jay.shop.constant.MessageConstants.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,7 +26,7 @@ public class AmqpItemController {
         return item.subscribeOn(Schedulers.boundedElastic())
                 .flatMap(content -> {
                     return Mono.fromCallable(() -> {
-                        template.convertAndSend("ecommerce-app", "new-items", content);
+                        template.convertAndSend(EXCHANGE, ROUTING_KEY, content);
                         return ResponseEntity.created(URI.create("/items"))
                                 .build();
                     });
