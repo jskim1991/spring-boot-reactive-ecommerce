@@ -1,10 +1,10 @@
 package io.jay.shop.service;
 
-import io.jay.shop.Cart;
-import io.jay.shop.CartItem;
-import io.jay.shop.Item;
-import io.jay.shop.mongo.CartRepository;
-import io.jay.shop.mongo.ItemRepository;
+import io.jay.shop.domain.Cart;
+import io.jay.shop.domain.CartItem;
+import io.jay.shop.domain.Item;
+import io.jay.shop.store.CartRepository;
+import io.jay.shop.store.ItemRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
@@ -23,14 +23,14 @@ public class CartService {
         return itemRepository.findAll();
     }
 
-    public Mono<Cart> getCart() {
-        return cartRepository.findById("My cart")
-                .defaultIfEmpty(new Cart("My cart"));
+    public Mono<Cart> getCart(String cartName) {
+        return cartRepository.findById(cartName)
+                .defaultIfEmpty(new Cart(cartName));
     }
 
-    public Mono<Cart> addItemToCart(String itemId) {
-        return cartRepository.findById("My cart")
-                .defaultIfEmpty(new Cart("My cart"))
+    public Mono<Cart> addItemToCart(String cartName, String itemId) {
+        return cartRepository.findById(cartName)
+                .defaultIfEmpty(new Cart(cartName))
                 .flatMap(cart -> {
                     return cart.getCartItems().stream()
                             .filter(cartItem -> cartItem.getItem().getId().equals(itemId))

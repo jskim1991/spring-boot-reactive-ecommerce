@@ -1,9 +1,11 @@
 package io.jay.shop.controller;
 
-import io.jay.shop.Cart;
-import io.jay.shop.Item;
+import io.jay.shop.domain.Cart;
+import io.jay.shop.domain.Item;
 import io.jay.shop.service.CartService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,12 +30,16 @@ public class HomeController {
     }
 
     @GetMapping("/cart")
-    Mono<Cart> cart() {
-        return cartService.getCart();
+    Mono<Cart> cart(@AuthenticationPrincipal UserDetails userDetails) {
+        return cartService.getCart(cartName(userDetails));
     }
 
     @PostMapping("/cart/add/{id}")
-    Mono<Cart> addToCart(@PathVariable String id) {
-        return cartService.addItemToCart(id);
+    Mono<Cart> addToCart(@AuthenticationPrincipal UserDetails userDetails, @PathVariable String id) {
+        return cartService.addItemToCart(cartName(userDetails), id);
+    }
+
+    private String cartName(UserDetails userDetails) {
+        return userDetails.getUsername() + "'s Cart";
     }
 }

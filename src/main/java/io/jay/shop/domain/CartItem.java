@@ -1,4 +1,4 @@
-package io.jay.shop;
+package io.jay.shop.domain;
 
 import lombok.Data;
 

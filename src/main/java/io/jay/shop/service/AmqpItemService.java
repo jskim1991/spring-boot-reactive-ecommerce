@@ -1,8 +1,8 @@
 package io.jay.shop.service;
 
-import io.jay.shop.Item;
+import io.jay.shop.domain.Item;
 import io.jay.shop.constant.MessageConstants;
-import io.jay.shop.mongo.ItemRepository;
+import io.jay.shop.store.ItemRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Service;

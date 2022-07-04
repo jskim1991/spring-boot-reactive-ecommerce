@@ -1,10 +1,10 @@
 package io.jay.shop.controller;
 
-import io.jay.shop.Item;
-import io.jay.shop.constant.MessageConstants;
+import io.jay.shop.domain.Item;
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,7 +21,8 @@ public class AmqpItemController {
 
     private final AmqpTemplate template;
 
-    @PostMapping("/ampq/items/add")
+    @PreAuthorize("hasRole('INVENTORY')")
+    @PostMapping("/amqp/items/add")
     Mono<ResponseEntity<?>> addNewItem(@RequestBody Mono<Item> item) {
         return item.subscribeOn(Schedulers.boundedElastic())
                 .flatMap(content -> {

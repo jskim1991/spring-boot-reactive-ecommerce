@@ -1,4 +1,4 @@
-package io.jay.shop.mongo;
+package io.jay.shop.store;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

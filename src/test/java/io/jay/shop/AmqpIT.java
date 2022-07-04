@@ -1,12 +1,13 @@
 package io.jay.shop;
 
-import io.jay.shop.mongo.ItemRepository;
+import io.jay.shop.domain.Item;
+import io.jay.shop.store.ItemRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ContextConfiguration;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.reactive.server.WebTestClient;
@@ -21,8 +22,7 @@ import static org.hamcrest.Matchers.equalTo;
 @SpringBootTest(properties = {"spring.mongodb.embedded.version=5.0.6"})
 @AutoConfigureWebTestClient
 @Testcontainers
-@ContextConfiguration
-public class AmpqIT {
+public class AmqpIT {
 
     @Container
     static RabbitMQContainer rabbitContainer = new RabbitMQContainer("rabbitmq:3.7.25-management-alpine");
@@ -47,9 +47,10 @@ public class AmpqIT {
     }
 
     @Test
-    void itemsAreAdded_viaAmpq() {
+    @WithMockUser(username = "admin", roles = {"INVENTORY"})
+    void itemsAreAdded_viaAmqp() {
         client.post()
-                .uri("/ampq/items/add")
+                .uri("/amqp/items/add")
                 .bodyValue(new Item("Desktop", 1999.98))
                 .exchange()
                 .expectStatus().isCreated()

@@ -1,7 +1,7 @@
 package io.jay.shop.loader;
 
-import io.jay.shop.Item;
-import io.jay.shop.mongo.ItemRepository;
+import io.jay.shop.domain.Item;
+import io.jay.shop.store.ItemRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;

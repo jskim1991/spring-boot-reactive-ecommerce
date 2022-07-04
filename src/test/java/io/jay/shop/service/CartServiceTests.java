@@ -1,10 +1,10 @@
 package io.jay.shop.service;
 
-import io.jay.shop.Cart;
-import io.jay.shop.CartItem;
-import io.jay.shop.Item;
-import io.jay.shop.mongo.CartRepository;
-import io.jay.shop.mongo.ItemRepository;
+import io.jay.shop.domain.Cart;
+import io.jay.shop.domain.CartItem;
+import io.jay.shop.domain.Item;
+import io.jay.shop.store.CartRepository;
+import io.jay.shop.store.ItemRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import reactor.core.publisher.Flux;
@@ -72,7 +72,7 @@ public class CartServiceTests {
         when(mockCartRepository.save(any(Cart.class)))
                 .thenReturn(Mono.just(sampleCart));
 
-        cartService.addItemToCart("item id")
+        cartService.addItemToCart("My cart", "item id")
                 .as(StepVerifier::create)
                 .assertNext(cart -> {
                     List<CartItem> cartItems = cart.getCartItems();
@@ -105,7 +105,7 @@ public class CartServiceTests {
         when(mockCartRepository.save(any(Cart.class)))
                 .thenReturn(Mono.just(updatedCart));
 
-        cartService.addItemToCart("item id")
+        cartService.addItemToCart("My cart", "item id")
                 .as(StepVerifier::create)
                 .assertNext(cart -> {
                     List<CartItem> cartItems = cart.getCartItems();
